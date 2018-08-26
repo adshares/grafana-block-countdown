@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 const panelDefaults = {
   bgColor: null,
-  launchTimestamp: Math.floor(Date.now() / 1000) + 24 * 3600,
+  launchTimestamp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
   blockLength: 512,
   fontSize: '40px',
   showLabels: false
@@ -58,7 +58,7 @@ export class BlockCountdownCtrl extends PanelCtrl {
   }
 
   onInitEditMode () {
-    this.addEditorTab('Options', 'public/plugins/grafana-clock-panel/editor.html', 2)
+    this.addEditorTab('Options', 'public/plugins/block-countdown-panel/editor.html', 2)
   }
 
   onPanelTeardown () {
@@ -67,13 +67,27 @@ export class BlockCountdownCtrl extends PanelCtrl {
 
   getTimeRemaining (endtime) {
     const t = Date.parse(endtime) - Date.parse(new Date())
-    return {
-      'Total': t,
-      'Days': Math.floor(t / (1000 * 60 * 60 * 24)),
-      'Hours': Math.floor((t / (1000 * 60 * 60)) % 24),
-      'Minutes': Math.floor((t / 1000 / 60) % 60),
-      'Seconds': Math.floor((t / 1000) % 60)
+
+    let ret = {}
+
+    const days = Math.floor(t / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((t / (1000 * 60 * 60)) % 24)
+    const minutes = Math.floor((t / 1000 / 60) % 60)
+    const seconds = Math.floor((t / 1000) % 60)
+
+    ret.Total = t
+    if (days || this.panel.blockLength >= 60 * 60 * 24) {
+      ret.Days = days
     }
+    if (hours || this.panel.blockLength >= 60 * 60) {
+      ret.Hours = hours
+    }
+    if (minutes || this.panel.blockLength >= 60) {
+      ret.Minutes = minutes
+    }
+    ret.Seconds = seconds
+
+    return ret
   }
 
   getEndDate () {
@@ -87,7 +101,7 @@ export class BlockCountdownCtrl extends PanelCtrl {
     return new Date(countdown * 1000)
   }
 
-  render () {
+  renderClock () {
     this.trackers = {}
     const t = this.getTimeRemaining(this.getEndDate())
 
@@ -107,7 +121,7 @@ export class BlockCountdownCtrl extends PanelCtrl {
   updateClock () {
     const t = this.getTimeRemaining(this.getEndDate())
     for (const key in this.trackers) {
-      if (t[key]) {
+      if (t[key] != null) {
         this.trackers[key].update(t[key])
       }
     }
@@ -115,11 +129,11 @@ export class BlockCountdownCtrl extends PanelCtrl {
     this.nextTickPromise = this.$timeout(this.updateClock.bind(this), 500)
   }
 
-  link(scope, elem) {
+  link (scope, elem) {
     this.initStyles()
     this.el = elem.find('.flip-clock')
     this.events.on('render', () => {
-      this.render()
+      this.renderClock()
     })
   }
 

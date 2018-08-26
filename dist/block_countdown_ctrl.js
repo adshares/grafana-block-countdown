@@ -62,7 +62,7 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
 
       panelDefaults = {
         bgColor: null,
-        launchTimestamp: Math.floor(Date.now() / 1000) + 24 * 3600,
+        launchTimestamp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
         blockLength: 512,
         fontSize: '40px',
         showLabels: false
@@ -134,7 +134,7 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
         _createClass(BlockCountdownCtrl, [{
           key: 'onInitEditMode',
           value: function onInitEditMode() {
-            this.addEditorTab('Options', 'public/plugins/grafana-clock-panel/editor.html', 2);
+            this.addEditorTab('Options', 'public/plugins/block-countdown-panel/editor.html', 2);
           }
         }, {
           key: 'onPanelTeardown',
@@ -145,13 +145,27 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
           key: 'getTimeRemaining',
           value: function getTimeRemaining(endtime) {
             var t = Date.parse(endtime) - Date.parse(new Date());
-            return {
-              'Total': t,
-              'Days': Math.floor(t / (1000 * 60 * 60 * 24)),
-              'Hours': Math.floor(t / (1000 * 60 * 60) % 24),
-              'Minutes': Math.floor(t / 1000 / 60 % 60),
-              'Seconds': Math.floor(t / 1000 % 60)
-            };
+
+            var ret = {};
+
+            var days = Math.floor(t / (1000 * 60 * 60 * 24));
+            var hours = Math.floor(t / (1000 * 60 * 60) % 24);
+            var minutes = Math.floor(t / 1000 / 60 % 60);
+            var seconds = Math.floor(t / 1000 % 60);
+
+            ret.Total = t;
+            if (days || this.panel.blockLength >= 60 * 60 * 24) {
+              ret.Days = days;
+            }
+            if (hours || this.panel.blockLength >= 60 * 60) {
+              ret.Hours = hours;
+            }
+            if (minutes || this.panel.blockLength >= 60) {
+              ret.Minutes = minutes;
+            }
+            ret.Seconds = seconds;
+
+            return ret;
           }
         }, {
           key: 'getEndDate',
@@ -166,8 +180,8 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
             return new Date(countdown * 1000);
           }
         }, {
-          key: 'render',
-          value: function render() {
+          key: 'renderClock',
+          value: function renderClock() {
             this.trackers = {};
             var t = this.getTimeRemaining(this.getEndDate());
 
@@ -188,7 +202,7 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
           value: function updateClock() {
             var t = this.getTimeRemaining(this.getEndDate());
             for (var key in this.trackers) {
-              if (t[key]) {
+              if (t[key] != null) {
                 this.trackers[key].update(t[key]);
               }
             }
@@ -203,7 +217,7 @@ System.register(['app/plugins/sdk', 'lodash'], function (_export, _context) {
             this.initStyles();
             this.el = elem.find('.flip-clock');
             this.events.on('render', function () {
-              _this2.render();
+              _this2.renderClock();
             });
           }
         }, {
