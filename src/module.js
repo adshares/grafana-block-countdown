@@ -1,5 +1,5 @@
-import {ClockCtrl} from './clock_ctrl';
+import {BlockCountdownCtrl} from './block_countdown_ctrl';
 
 export {
-  ClockCtrl as PanelCtrl
+  BlockCountdownCtrl as PanelCtrl
 };

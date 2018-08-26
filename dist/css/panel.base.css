@@ -1,0 +1,109 @@
+.flip-clock {
+  text-align: center;
+  perspective: 400px;
+  margin: 0.2em auto;
+  display: flex;
+}
+.flip-clock *,
+.flip-clock *:before,
+.flip-clock *:after {
+  box-sizing: border-box;
+}
+.flip-clock .flip-clock__piece {
+  display: inline-block;
+  margin: 0 5px;
+  line-height: 0.4em;
+}
+.flip-clock .flip-clock__slot {
+  font-size: 0.4em;
+}
+.flip-clock .card {
+  display: block;
+  position: relative;
+  padding-bottom: 0.72em;
+  _font-size: 9vw;
+  line-height: 0.95;
+}
+.flip-clock .card__top,
+.flip-clock .card__bottom,
+.flip-clock .card__back::before,
+.flip-clock .card__back::after {
+  display: block;
+  height: 0.72em;
+  padding: 0.25em 0.25em;
+  border-radius: 0.15em 0.15em 0 0;
+  backface-visiblity: hidden;
+  transform-style: preserve-3d;
+  width: 1.8em;
+  transform: translateZ(0);
+}
+.flip-clock .card__bottom {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-radius: 0 0 0.15em 0.15em;
+  pointer-events: none;
+  overflow: hidden;
+}
+.flip-clock .card__bottom::after {
+  display: block;
+  margin-top: -0.72em;
+}
+.flip-clock .card__back::before,
+.flip-clock .card__bottom::after {
+  content: attr(data-value);
+}
+.flip-clock .card__back {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 0%;
+  pointer-events: none;
+}
+.flip-clock .card__back::before {
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
+}
+.flip-clock .flip .card__back::before {
+  animation: flipTop 0.3s cubic-bezier(0.37, 0.01, 0.94, 0.35);
+  animation-fill-mode: both;
+  transform-origin: center bottom;
+}
+.flip-clock .flip .card__back .card__bottom {
+  transform-origin: center top;
+  animation-fill-mode: both;
+  animation: flipBottom 0.6s cubic-bezier(0.15, 0.45, 0.28, 1);
+}
+@keyframes flipTop {
+  0% {
+    transform: rotateX(0deg);
+    z-index: 2;
+  }
+  0%,
+  99% {
+    opacity: 0.99;
+  }
+  100% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+@keyframes flipBottom {
+  0%,
+  50% {
+    z-index: -1;
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  51% {
+    opacity: 0.99;
+  }
+  100% {
+    opacity: 0.99;
+    transform: rotateX(0deg);
+    z-index: 5;
+  }
+}

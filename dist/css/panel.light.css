@@ -1,0 +1,12 @@
+.flip-clock .card__top,
+.flip-clock .card__bottom,
+.flip-clock .card__back::before,
+.flip-clock .card__back::after {
+  color: #ccc;
+  background: #222;
+}
+.flip-clock .card__bottom {
+  color: #FFF;
+  border-top-color: #000;
+  background: #393939;
+}

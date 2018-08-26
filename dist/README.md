@@ -1,63 +1,38 @@
-## Clock Panel Plugin for Grafana
+<p align="center">
+  <a href="https://adshares.net/">
+    <img src="https://adshares.net/logos/ads.svg" alt="Adshares" width=72 height=72>
+  </a>
+  <h3 align="center"><small>Block Countdown Panel Plugin for Grafana</small></h3>
+  <p align="center">
+    <a href="https://github.com/adshares/ads-php-client/issues/new?template=bug_report.md&labels=Bug">Report bug</a>
+    ·
+    <a href="https://github.com/adshares/ads-php-client/issues/new?template=feature_request.md&labels=New%20Feature">Request feature</a>
+  </p>
+</p>
 
-The Clock Panel can show the current time or a countdown and updates every second.
+<br>
 
-Show the time in another office or show a countdown to an important event.
+The Block Countdown Panel can show a countdown to the next block and updates every second.
+
+**Based on:**
+
+- https://github.com/grafana/clock-panel
+- https://codepen.io/shshaw/pen/vKzoLL
 
 ### Options
 
-- **Mode**:
+- **Launch timestamp**:
 
-  Default is time. If countdown is chosen then set the Countdown Deadline to start the countdown.
+  The time when the launch begins.
 
-- **12 or 24 hour**:
+- **Block Length**:
 
-  Show time in the 12/24 hour format.
+  The block length unit is seconds. Default is 512 s.
 
-- **Offset from UTC**:
+- **Font Size**:
 
-  This is a simple way to get the time for different time zones. Default is empty and that means local time (whatever that is on your computer). -5 would be UTC -5 (New York or central US)
+  Choose a font size for the clock.
 
-- **Countdown Deadline**:
+- **Show Labels**:
 
-  Used in conjuction with the mode being set to countdown. Choose a date and time to count down to.
-
-- **Countdown End Text**:
-
-  The text to show when the countdown ends. E.g. LIFTOFF
-
-- **Date/Time formatting options**:
-
-  The font size, weight and date/time formatting can be customized here. If the seconds ticking annoys you then change the time format to HH:mm for the 24 hour clock or h:mm A for the 12 hour clock, or see the [full list of formatting options](https://momentjs.com/docs/#/displaying/).
-
-- **Bg Color**:
-
-  Choose a background color for the clock with the color picker.
-
-### Screenshots
-
-- [Screenshot of two clocks and a countdown](https://raw.githubusercontent.com/grafana/clock-panel/06ecf59c191db642127c6153bc3145e93a1df1f8/src/img/screenshot-clocks.png)
-- [Screenshot of the options screen](https://raw.githubusercontent.com/grafana/clock-panel/06ecf59c191db642127c6153bc3145e93a1df1f8/src/img/screenshot-clock-options.png)
-
-### Development
-
-Using Docker:
-
-1. Clone the repository and `cd` to it
-1. Run a local Grafana instance with the development version of the plugin: `docker run -p 3000:3000 -d --name grafana-plugin-dev --volume $(pwd)/dist:/var/lib/grafana/plugins/clock-panel grafana/grafana`
-1. Check the logs to see that Grafana has started up: `docker logs -f grafana-plugin-dev`
-1. Make sure you have https://github.com/gruntjs/grunt-cli installed
-1. Start the "watch" task: `grunt watch`
-1. Open Grafana at http://localhost:3000/
-1. Log in with username "admin" and password "admin"
-1. Create new dashboard and add the plugin
-
-#### Changelog
-
-##### v0.0.8
-
-- Remove extraneous comma when 1 second left in the countdown. PR from @linkslice
-
-##### v0.0.9
-
-- Fixes bug with default properties not getting deep cloned [#20](https://github.com/grafana/clock-panel/issues/20)
+  Show labels under countdown pieces.

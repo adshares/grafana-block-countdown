@@ -1,13 +1,15 @@
 'use strict';
 
-System.register(['./clock_ctrl'], function (_export, _context) {
-  var ClockCtrl;
+System.register(['./block_countdown_ctrl'], function (_export, _context) {
+  "use strict";
+
+  var BlockCountdownCtrl;
   return {
-    setters: [function (_clock_ctrl) {
-      ClockCtrl = _clock_ctrl.ClockCtrl;
+    setters: [function (_block_countdown_ctrl) {
+      BlockCountdownCtrl = _block_countdown_ctrl.BlockCountdownCtrl;
     }],
     execute: function () {
-      _export('PanelCtrl', ClockCtrl);
+      _export('PanelCtrl', BlockCountdownCtrl);
     }
   };
 });
